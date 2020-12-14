@@ -13,6 +13,7 @@ public class DefaultView extends WebMvcConfigurerAdapter {
 
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/index.html").setViewName("index");
+        registry.addViewController("/index1.html").setViewName("index1");
         registry.addViewController("/socket1.html").setViewName("socket1");
         registry.addViewController("/socket2.html").setViewName("socket2");
         registry.addViewController("/socket3.html").setViewName("socket3");
