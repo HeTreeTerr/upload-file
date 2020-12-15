@@ -231,6 +231,7 @@
             },
             error:function(jqXHR){
                 console.log("Error: "+jqXHR.status);
+                window.location.href = "/errorMsg.html";
             }
         });
         
@@ -280,6 +281,8 @@
                 data:"name="+name+"&iphone="+iphone,
                 dataType:"json",
                 success:function(data){
+                    $("#name").val("");
+                    $("#iphone").val("");
                     window.location.href = "/successMsg.html";
                 }
             });
