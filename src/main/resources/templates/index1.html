@@ -25,11 +25,13 @@
     </style>
 </head>
 <body>
+<!--顶部提示-->
 <div class="weui-toptips weui-toptips_warn js_tooltips" id="topTips">错误提示</div>
 
 <div class="page__bd page__bd_spacing">
     <div class="weui-flex">
        <div class="weui-flex__item">
+           <!--logo图片-->
            <div class="img-list-box" id="imageId" style="text-align: center;">
                <img th:src="@{/asserts/img/orxC1wxoS83mJTLWthC4qkpDTxXE.png}" />
            </div>
@@ -71,6 +73,7 @@
     </div>
     <div class="weui-flex">
         <div class="weui-flex__item">
+            <!--小功能-->
             <button id="locationInfo" type="button" class="weui-btn weui-btn_primary">导弹轨迹</button>
             <a href="javascript:" id="errorMsg" class="weui-btn weui-btn_default">失败提示页</a>
             <a href="javascript:" id="successMsg" class="weui-btn weui-btn_default">成功提示页</a>
@@ -95,13 +98,15 @@
     </div>
 </div>
 <!--end toast-->
+<!--BEGIN textToast-->
 <div id="textToast" style="display: none;">
     <div class="weui-mask_transparent"></div>
     <div class="weui-toast weui-toast_text">
         <p class="weui-toast__content" id="textMessage">文字提示</p>
     </div>
 </div>
-
+<!--end textToast-->
+<!--BEGIN warnToast-->
 <div id="warnToast" style="opacity: 0; display: none;">
     <div class="weui-mask_transparent"></div>
     <div class="weui-toast">
@@ -109,18 +114,17 @@
         <p class="weui-toast__content">获取链接失败</p>
     </div>
 </div>
-
+<!--end warnToast-->
 </body>
 <!--jquery-->
 <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
-<!--<script type="text/javascript" th:src="@{/asserts/js/jquery.form.js}"></script>-->
 <!--引入wechat sdk-->
 <script type="text/javascript" src="http://res2.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 
 <script type="text/javascript">
-
+    /*处理当前路径*/
     let url = encodeURIComponent(location.href.split('#')[0]);
-    //alert(url);
+    //用户位置信息
     let latitude; // 纬度，浮点数，范围为90 ~ -90
     let longitude; // 经度，浮点数，范围为180 ~ -180。
     let speed; // 速度，以米/每秒计
@@ -189,7 +193,7 @@
                             accuracy = res.accuracy; // 位置精度
                         }
                     });
-
+                    //微信内置地图中查看位置信息
                     $("#locationInfo").click(function () {
                         //alert("查看位置信息：lat,long---"+latitude+"----"+longitude);
                         var flag = true;
@@ -257,7 +261,7 @@
         });
     });
 
-    // text
+    // text[表单提交]
     $(function(){
         var $textToast = $('#textToast');
         $('#showTextToast').on('click', function(){

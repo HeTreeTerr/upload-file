@@ -19,6 +19,11 @@ public class WechatController {
     @Autowired
     private WechatUtil wechatUtil;
 
+    /**
+     * 获取页面签章信息
+     * @param url
+     * @return
+     */
     @GetMapping("/js-sdk-config")
     public Map<String,Object> getSdk(@RequestParam(value = "url") String url) {
         Map<String,Object> map = new HashMap<>();
@@ -47,6 +52,15 @@ public class WechatController {
         return map;
     }
 
+    /**
+     * 公众平台配置服务器信息
+     * @param request
+     * @param response
+     * @param signature
+     * @param timestamp
+     * @param nonce
+     * @param echostr
+     */
     @RequestMapping(value = "/wechat", method = RequestMethod.GET)
     public void wechatGet(HttpServletRequest request,
                           HttpServletResponse response,
@@ -64,6 +78,12 @@ public class WechatController {
         }
     }
 
+    /**
+     * 核心逻辑用户信息录入
+     * @param name
+     * @param iphone
+     * @return
+     */
     @RequestMapping("/addUserInfo")
     public Boolean addUserInfo(@RequestParam(value = "name",required = true) String name,
                                @RequestParam(value = "iphone",required = true) String iphone){

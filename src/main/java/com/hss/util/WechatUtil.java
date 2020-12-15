@@ -107,6 +107,11 @@ public class WechatUtil {
         return ticket;
     }
 
+    /**
+     * 获取签章
+     * @param decript
+     * @return
+     */
     public String SHA1(String decript) {
         try {
             MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
@@ -130,27 +135,14 @@ public class WechatUtil {
         return "";
     }
 
-
-    public String SHA2(String decript){
-        String signature = null;
-        try
-        {
-            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-            crypt.reset();
-            crypt.update(decript.getBytes("UTF-8"));
-            signature = byteToHex(crypt.digest());
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        return signature;
-    }
-
+    /**
+     * 效验签章信息
+     * @param token
+     * @param signature
+     * @param timestamp
+     * @param nonce
+     * @return
+     */
     public boolean checkSignature(String token,String signature, String timestamp, String nonce) {
         if(StringUtils.isEmpty(token)) {
             return false;
@@ -210,14 +202,4 @@ public class WechatUtil {
         return s;
     }
 
-    private static String byteToHex(final byte[] hash) {
-        Formatter formatter = new Formatter();
-        for (byte b : hash)
-        {
-            formatter.format("%02x", b);
-        }
-        String result = formatter.toString();
-        formatter.close();
-        return result;
-    }
 }
