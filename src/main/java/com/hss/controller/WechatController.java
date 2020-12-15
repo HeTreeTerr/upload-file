@@ -63,4 +63,11 @@ public class WechatController {
             e.printStackTrace();
         }
     }
+
+    @RequestMapping("/addUserInfo")
+    public Boolean addUserInfo(@RequestParam(value = "name",required = true) String name,
+                               @RequestParam(value = "iphone",required = true) String iphone){
+        System.out.println("name="+name+"--------------iphone="+iphone);
+        return true;
+    }
 }

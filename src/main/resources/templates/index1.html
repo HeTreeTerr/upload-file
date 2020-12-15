@@ -10,15 +10,28 @@
     <!--<link rel="icon" href="https://getbootstrap.com/favicon.ico">-->
     <link th:href="@{/asserts/css/weui.min.css}" rel="stylesheet" />
     <title>海绵宝宝和小蜗</title>
+    <style type="text/css">
+        img{
+            width: 100px;
+            height: 100px;
+            margin-top: 15px;
+        }
+        .weui-form__control-area{
+            margin: 21px 0;
+        }
+        .weui-footer{
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-<div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
+<div class="weui-toptips weui-toptips_warn js_tooltips" id="topTips">错误提示</div>
 
 <div class="page__bd page__bd_spacing">
     <div class="weui-flex">
        <div class="weui-flex__item">
            <div class="img-list-box" id="imageId" style="text-align: center;">
-               <img style="width: 100px;height: 100px" th:src="@{/asserts/img/orxC1wxoS83mJTLWthC4qkpDTxXE.png}" />
+               <img th:src="@{/asserts/img/orxC1wxoS83mJTLWthC4qkpDTxXE.png}" />
            </div>
        </div>
     </div>
@@ -35,7 +48,7 @@
                                     <label class="weui-label">姓名</label>
                                 </div>
                                 <div class="weui-cell__hd">
-                                    <input id="js_input" class="weui-input" placeholder="我是__he">
+                                    <input id="name" class="weui-input" placeholder="我是__he">
                                 </div>
                             </div>
                             <div class="weui-cell weui-cell_active">
@@ -43,7 +56,7 @@
                                     <label class="weui-label">联系电话</label>
                                 </div>
                                 <div class="weui-cell__hd">
-                                    <input id="js_input" class="weui-input" placeholder="填写绑定的电话号码">
+                                    <input id="iphone" class="weui-input" placeholder="填写绑定的电话号码">
                                 </div>
                             </div>
                             <div class="weui-cell weui-cell_active">
@@ -58,7 +71,9 @@
     </div>
     <div class="weui-flex">
         <div class="weui-flex__item">
-            <button id="locationInfo" type="button" class="weui-btn weui-btn_primary">炸弹安装位置</button>
+            <button id="locationInfo" type="button" class="weui-btn weui-btn_primary">导弹轨迹</button>
+            <a href="javascript:" id="errorMsg" class="weui-btn weui-btn_default">失败提示页</a>
+            <a href="javascript:" id="successMsg" class="weui-btn weui-btn_default">成功提示页</a>
         </div>
     </div>
 </div>
@@ -193,8 +208,12 @@
                                 scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
                                 infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                             });
-                        }else{
-                            alert("等待获取位置信息");
+                        }else{//弹出文字提示
+                            $('#topTips').html('等待获取位置信息！');
+                            $('#topTips').fadeIn(200);
+                            setTimeout(function(){
+                                $('#topTips').fadeOut(200);
+                            }, 1500);
                         }
 
                     });
@@ -213,6 +232,14 @@
             error:function(jqXHR){
                 console.log("Error: "+jqXHR.status);
             }
+        });
+        
+        $("#errorMsg").click(function () {
+            window.location.href = "/errorMsg.html";
+        });
+
+        $("#successMsg").click(function () {
+            window.location.href = "/successMsg.html";
         });
     });
 
@@ -233,13 +260,38 @@
     $(function(){
         var $textToast = $('#textToast');
         $('#showTextToast').on('click', function(){
+            //字段效验
+            var name = $("#name").val();
+            var iphone = $("#iphone").val();
+            if(name == undefined || name == null || name == ''){
+                $("#textMessage").html("名称不能为空！");
+                textMsg();
+                return;
+            }
+            if(iphone == undefined || iphone == null || iphone == ''){
+                $("#textMessage").html("电话号不能为空！");
+                textMsg();
+                return;
+            }
+            //通过效验，添加数据
+            $.ajax({
+                type:"GET",
+                url:" /addUserInfo",
+                data:"name="+name+"&iphone="+iphone,
+                dataType:"json",
+                success:function(data){
+                    window.location.href = "/successMsg.html";
+                }
+            });
+        });
+
+        function textMsg(){
             if ($textToast.css('display') != 'none') return;
-            $("#textMessage").html("自定义文字提示内容！");
             $textToast.fadeIn(100);
             setTimeout(function () {
                 $textToast.fadeOut(100);
             }, 2000);
-        });
+        }
     });
 
     //warn
