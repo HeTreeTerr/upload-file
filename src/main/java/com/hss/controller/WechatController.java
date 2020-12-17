@@ -1,5 +1,7 @@
 package com.hss.controller;
 
+import com.hss.Domian.WechatUser;
+import com.hss.util.RedisUtil;
 import com.hss.util.WechatUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class WechatController {
 
     @Autowired
     private WechatUtil wechatUtil;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 获取页面签章信息
@@ -86,8 +91,32 @@ public class WechatController {
      */
     @RequestMapping("/addUserInfo")
     public Boolean addUserInfo(@RequestParam(value = "name",required = true) String name,
-                               @RequestParam(value = "iphone",required = true) String iphone){
-        System.out.println("name="+name+"--------------iphone="+iphone);
+                               @RequestParam(value = "iphone",required = true) String iphone,
+                               @RequestParam(value = "nickName",required = true)String nickName){
+        System.out.println("name="+name+"--------------iphone="+iphone+"----------------------nickName="+nickName);
         return true;
+    }
+
+    /**
+     * 获取微信用户的信息
+     * @return
+     */
+    @RequestMapping("/getWechatUserInf")
+    public WechatUser getWechatUserInf(@RequestParam(value = "code",required = true) String code){
+        String accessToken = null;
+        if(redisUtil.get("page_Token_" + code) != null){
+            accessToken = redisUtil.get("page_Token_" + code).toString();
+        }else{
+            Map<String, Object> pageAccessToken = wechatUtil.getPageAccessToken(code);
+            if(null != pageAccessToken &&
+                    pageAccessToken.containsKey("accessToken") &&
+                    null !=pageAccessToken.get("accessToken")){
+
+                accessToken = pageAccessToken.get("accessToken").toString();
+                redisUtil.set("page_Token_" + code,accessToken,7200);
+            }
+        }
+        WechatUser wechatUser = wechatUtil.getWechatUserInfo(accessToken);
+        return wechatUser;
     }
 }

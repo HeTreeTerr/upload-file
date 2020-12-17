@@ -1,6 +1,7 @@
 package com.hss.util;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hss.Domian.WechatUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信工具类
@@ -20,9 +23,9 @@ import java.util.Formatter;
 @Component
 public class WechatUtil {
 
-    public final static String AppId="wx05a8ddbcc54e0d4f";//第三方用户唯一凭证
+    public final static String AppId = "wx05a8ddbcc54e0d4f";//第三方用户唯一凭证
 
-    public final static String secret="2fafe98318eeef07c1286b4b30e2235b";//第三方用户唯一凭证密钥，即appsecret
+    public final static String Secret = "2fafe98318eeef07c1286b4b30e2235b";//第三方用户唯一凭证密钥，即appsecret
 
     @Autowired
     private RedisUtil redisUtil;
@@ -40,7 +43,7 @@ public class WechatUtil {
         }
         String grant_type = "client_credential";//获取access_token填写client_credential
         //这个url链接地址和参数皆不能变
-        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type="+grant_type+"&appid="+AppId+"&secret="+secret;
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type="+grant_type+"&appid="+AppId+"&secret="+Secret;
 
         try {
             URL urlGet = new URL(url);
@@ -108,31 +111,87 @@ public class WechatUtil {
     }
 
     /**
-     * 获取签章
-     * @param decript
+     * 获取页面版accessToken
      * @return
      */
-    public String SHA1(String decript) {
+    public Map<String,Object> getPageAccessToken(String code){
+        Map<String,Object> map = new HashMap<>();
+        if(code == null){
+            return null;
+        }
+        String grant_type = "authorization_code";
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+AppId+"&secret="+Secret+"&code="+code+"&grant_type="+grant_type;
         try {
-            MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
-            digest.update(decript.getBytes());
-            byte messageDigest[] = digest.digest();
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            // 字节数组转换为 十六进制 数
-            for (int i = 0; i < messageDigest.length; i++) {
-                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
-                if (shaHex.length() < 2) {
-                    hexString.append(0);
-                }
-                hexString.append(shaHex);
+            URL urlGet = new URL(url);
+            HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
+            http.setRequestMethod("GET"); // 必须是get方式请求
+            http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            http.setDoOutput(true);
+            http.setDoInput(true);
+            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒
+            System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒
+            http.connect();
+            InputStream is = http.getInputStream();
+            int size = is.available();
+            byte[] jsonBytes = new byte[size];
+            is.read(jsonBytes);
+            String message = new String(jsonBytes, "UTF-8");
+            JSONObject demoJson = JSONObject.parseObject(message);
+            is.close();
+            System.out.println("JSON字符串："+demoJson);
+            //结果解析
+            if(demoJson.containsKey("errcode")){
+                return null;
             }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
+            map.put("accessToken",demoJson.getString("access_token"));
+            map.put("expiresIn",demoJson.getString("expires_in"));
+            map.put("refreshToken",demoJson.getString("refresh_token"));
+            map.put("openid",demoJson.getString("openid"));
+            map.put("scope",demoJson.getString("scope"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return map;
+    }
+
+    /**
+     * 获取微信用户信息
+     * @return
+     */
+    public WechatUser getWechatUserInfo(String pageAccessToken){
+        if(pageAccessToken == null){
+            return null;
+        }
+        WechatUser wechatUser = null;
+        String url = "https://api.weixin.qq.com/sns/userinfo?access_token="+pageAccessToken+"&openid="+AppId+"&lang=zh_CN";
+
+        try {
+            URL urlGet = new URL(url);
+            HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
+            http.setRequestMethod("GET"); // 必须是get方式请求
+            http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            http.setDoOutput(true);
+            http.setDoInput(true);
+            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒
+            System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒
+            http.connect();
+            InputStream is = http.getInputStream();
+            int size = is.available();
+            byte[] jsonBytes = new byte[size];
+            is.read(jsonBytes);
+            String message = new String(jsonBytes, "UTF-8");
+            JSONObject demoJson = JSONObject.parseObject(message);
+            is.close();
+            System.out.println("JSON字符串："+demoJson);
+            //结果解析
+            if(demoJson.containsKey("errcode")){
+                return null;
+            }
+            wechatUser = JSONObject.parseObject(message, WechatUser.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return wechatUser;
     }
 
     /**
@@ -169,6 +228,34 @@ public class WechatUtil {
         content = null;
         // 将sha1加密后的字符串可与signature对比，标识该请求来源于微信
         return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
+    }
+
+    /**
+     * 获取签章
+     * @param decript
+     * @return
+     */
+    public String SHA1(String decript) {
+        try {
+            MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
+            digest.update(decript.getBytes());
+            byte messageDigest[] = digest.digest();
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            // 字节数组转换为 十六进制 数
+            for (int i = 0; i < messageDigest.length; i++) {
+                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
+                if (shaHex.length() < 2) {
+                    hexString.append(0);
+                }
+                hexString.append(shaHex);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /**
