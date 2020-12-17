@@ -1,6 +1,8 @@
 package com.hss.controller;
 
+import com.hss.Domian.BusinessInfo;
 import com.hss.Domian.WechatUser;
+import com.hss.service.BusinessService;
 import com.hss.util.RedisUtil;
 import com.hss.util.WechatUtil;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,6 +26,9 @@ public class WechatController {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private BusinessService businessService;
 
     /**
      * 获取页面签章信息
@@ -94,6 +100,11 @@ public class WechatController {
                                @RequestParam(value = "iphone",required = true) String iphone,
                                @RequestParam(value = "nickName",required = true)String nickName){
         System.out.println("name="+name+"--------------iphone="+iphone+"----------------------nickName="+nickName);
+        BusinessInfo businessInfo = new BusinessInfo();
+        businessInfo.setName(name);
+        businessInfo.setIphone(iphone);
+        businessInfo.setNickName(nickName);
+        businessService.save(businessInfo);
         return true;
     }
 
@@ -118,5 +129,11 @@ public class WechatController {
         }
         WechatUser wechatUser = wechatUtil.getWechatUserInfo(accessToken);
         return wechatUser;
+    }
+
+    @RequestMapping(value = "/finBusinessList")
+    public List<BusinessInfo> finBusinessList(@RequestParam(value = "openid") String openid){
+
+        return businessService.findBusinessList(openid);
     }
 }

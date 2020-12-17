@@ -20,6 +20,8 @@ public class DefaultView extends WebMvcConfigurerAdapter {
         registry.addViewController("/socket3.html").setViewName("socket3");
         registry.addViewController("/errorMsg.html").setViewName("errorMsg");
         registry.addViewController("/successMsg.html").setViewName("successMsg");
+        registry.addViewController("/promptMsg.html").setViewName("promptMsg");
+        registry.addViewController("/wechatInfo.html").setViewName("wechatInfo");
         //设置优先级
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
         super.addViewControllers(registry);

@@ -9,78 +9,33 @@
     <meta name="author" content="">
     <!--<link rel="icon" href="https://getbootstrap.com/favicon.ico">-->
     <link th:href="@{/asserts/css/weui.min.css}" rel="stylesheet" />
-    <title>海绵宝宝和小蜗</title>
-    <style type="text/css">
-        img{
-            width: 100px;
-            height: 100px;
-            margin-top: 15px;
-        }
-        .weui-form__control-area{
-            margin: 21px 0;
-        }
-        .weui-footer{
-            margin-top: 15px;
-        }
-    </style>
+    <title>我的列表信息</title>
 </head>
 <body>
 <!--顶部提示-->
 <div class="weui-toptips weui-toptips_warn js_tooltips" id="topTips">错误提示</div>
 
-<div class="page__bd page__bd_spacing">
-    <div class="weui-flex">
-       <div class="weui-flex__item">
-           <!--logo图片-->
-           <div class="img-list-box" id="imageId" style="text-align: center;">
-               <img id="headImgUrl" th:src="@{/asserts/img/20150723115018_ma428.jpg}" />
-               <div>昵称：<span id="nickName"></span></div>
-           </div>
-       </div>
-    </div>
-    <div class="weui-flex">
-        <div class="weui-flex__item">
-            <!--表单-->
-            <div class="weui-form">
-                <div class="weui-form__control-area">
-                    <div class="weui-cells__group weui-cells__group_form">
-                        <div class="weui-cells__title">添加联系人</div>
-                        <div class="weui-cells weui-cells_form">
-                            <div class="weui-cell weui-cell_active">
-                                <div class="weui-cell__hd">
-                                    <label class="weui-label">姓名</label>
-                                </div>
-                                <div class="weui-cell__hd">
-                                    <input id="name" class="weui-input" placeholder="我是__he">
-                                </div>
-                            </div>
-                            <div class="weui-cell weui-cell_active">
-                                <div class="weui-cell__hd">
-                                    <label class="weui-label">联系电话</label>
-                                </div>
-                                <div class="weui-cell__hd">
-                                    <input id="iphone" class="weui-input" placeholder="填写绑定的电话号码">
-                                </div>
-                            </div>
-                            <div class="weui-cell weui-cell_active">
-                                <!--<a href="javascript:" class="weui-btn weui-btn_default" id="showToast">成功提示</a>-->
-                                <a href="javascript:" class="weui-btn weui-btn_default" id="showTextToast">提交</a>
-                            </div>
-                        </div>
-                    </div>
+<div class="page panel js_show">
+
+</div>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__hd">我的联系人</div>
+    <div class="weui-panel__bd">
+        <div class="weui-cells" id="businessList">
+            <!--<a class="weui-cell  weui-cell_access" href="javascript:">
+                <div class="weui-cell__bd">
+                    <p>18628466845</p>
                 </div>
-            </div>
+                <div class="weui-cell__ft">何森森</div>
+            </a>-->
+
         </div>
     </div>
-    <div class="weui-flex">
-        <div class="weui-flex__item">
-            <!--小功能-->
-            <button id="locationInfo" type="button" class="weui-btn weui-btn_primary">导弹轨迹</button>
-            <button id="myListInfo" type="button" class="weui-btn weui-btn_primary">我的联系人</button>
-            <!--<a href="javascript:" id="errorMsg" class="weui-btn weui-btn_default">失败提示页</a>
-            <a href="javascript:" id="successMsg" class="weui-btn weui-btn_default">成功提示页</a>
-            <a href="javascript:" id="promptMsg" class="weui-btn weui-btn_default">信息提示页</a>-->
-        </div>
+    <div class="weui-panel__ft">
+        <a href="javascript:" class="weui-cell weui-cell_active weui-cell_access weui-cell_link">
+            <div class="weui-cell__bd">查看更多</div>
+            <span class="weui-cell__ft"></span>
+        </a>
     </div>
 </div>
 <div class="weui-footer">
@@ -91,33 +46,6 @@
         Copyright © 2020-2200 weui.io
     </p>
 </div>
-
-<!--BEGIN toast-->
-<div id="toast" style="display: none;">
-    <div class="weui-mask_transparent"></div>
-    <div class="weui-toast">
-        <i class="weui-icon-success-no-circle weui-icon_toast"></i>
-        <p class="weui-toast__content">已完成</p>
-    </div>
-</div>
-<!--end toast-->
-<!--BEGIN textToast-->
-<div id="textToast" style="display: none;">
-    <div class="weui-mask_transparent"></div>
-    <div class="weui-toast weui-toast_text">
-        <p class="weui-toast__content" id="textMessage">文字提示</p>
-    </div>
-</div>
-<!--end textToast-->
-<!--BEGIN warnToast-->
-<div id="warnToast" style="opacity: 0; display: none;">
-    <div class="weui-mask_transparent"></div>
-    <div class="weui-toast">
-        <i class="weui-icon-warn weui-icon_toast"></i>
-        <p class="weui-toast__content">获取链接失败</p>
-    </div>
-</div>
-<!--end warnToast-->
 </body>
 <!--jquery-->
 <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
@@ -127,11 +55,7 @@
 <script type="text/javascript">
     /*处理当前路径*/
     let url = encodeURIComponent(location.href.split('#')[0]);
-    //用户位置信息
-    let latitude; // 纬度，浮点数，范围为90 ~ -90
-    let longitude; // 经度，浮点数，范围为180 ~ -180。
-    let speed; // 速度，以米/每秒计
-    let accuracy; // 位置精度
+
     let code;
 
     $(function () {
@@ -149,8 +73,7 @@
                 async: false,
                 success:function(data){
                     console.log("data="+data);
-                    $("#headImgUrl").attr("src",data.headimgurl);
-                    $("#nickName").html(data.nickName);
+                    ajaxFindBusinessList(data.openid);
                 },
                 error:function(jqXHR){
                     console.log("Error: "+jqXHR.status);
@@ -237,7 +160,7 @@
                                 longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
                                 name: '蟹堡王', // 位置名
                                 address: '比基尼海滩蟹堡王', // 地址详情说明
-                                scale: 12, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                                scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
                                 infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                             });
                         }else{//弹出文字提示
@@ -284,69 +207,85 @@
         });
     });
 
-    // toast
-    $(function(){
-        var $toast = $('#toast');
-        $('#showToast').on('click', function(){
-            if ($toast.css('display') != 'none') return;
+    $(function () {
+        //配置微信
+        $.ajax({
+            type:"GET",
+            url:" /js-sdk-config",
+            data:"url="+url,
+            dataType:"json",
+            async: false,
+            success:function(data){
+                // 配置功能
+                wx.config({
+                    debug: false,
+                    appId: data.appId,
+                    timestamp: parseInt(data.timestamp),
+                    nonceStr: data.nonceStr,
+                    signature: data.signature,
+                    jsApiList: [
+                        'checkJsApi',
+                        'onMenuShareAppMessage',
+                        'onMenuShareTimeline',
+                        'openLocation',
+                        'openLocation'
+                    ]
+                });
 
-            $toast.fadeIn(100);
-            setTimeout(function () {
-                $toast.fadeOut(100);
-            }, 2000);
-        });
-    });
+                wx.ready(function() {
 
-    // text[表单提交]
-    $(function(){
-        var $textToast = $('#textToast');
-        $('#showTextToast').on('click', function(){
-            //字段效验
-            var name = $("#name").val();
-            var iphone = $("#iphone").val();
-            if(name == undefined || name == null || name == ''){
-                $("#textMessage").html("名称不能为空！");
-                textMsg();
-                return;
+                    wx.onMenuShareAppMessage({
+                        title: '我是标题ojbk', // 分享标题【必填】
+                        desc: '我是分享描述，看我', // 分享描述【必填】
+                        link: 'http://k65be4.natappfree.cc/index1.html', // 分享链接【必填】
+                        imgUrl: 'http://k65be4.natappfree.cc/asserts/img/20150723115018_ma428.jpg', // 分享图标【必填】
+                        type: 'link', // 分享类型,music、video或link，不填默认为link【必填】
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                            alert('已分享');
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                            alert('已取消');
+                        }
+                    });
+
+                    wx.onMenuShareTimeline({
+                        title: '我是标题ojbk', // 分享标题
+                        link:  'http://k65be4.natappfree.cc/index1.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: 'http://k65be4.natappfree.cc/asserts/img/20150723115018_ma428.jpg', // 分享图标
+                        success: function () {
+                            // 用户点击了分享后执行的回调函数
+                            alert("+1");
+                        }
+                    });
+
+                    wx.getLocation({
+                        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                        success: function (res) {
+                            latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                            longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                            speed = res.speed; // 速度，以米/每秒计
+                            accuracy = res.accuracy; // 位置精度
+                        }
+                    });
+
+                    //效验可用
+                    wx.checkJsApi({
+                        jsApiList: [
+                            'onMenuShareAppMessage','onMenuShareTimeline'
+                        ],
+                        success: function (res) {
+                            //alert(res.errMsg);
+                        }
+                    });
+                });
+            },
+            error:function(jqXHR){
+                console.log("Error: "+jqXHR.status);
+                window.location.href = "/errorMsg.html";
             }
-            if(iphone == undefined || iphone == null || iphone == ''){
-                $("#textMessage").html("电话号不能为空！");
-                textMsg();
-                return;
-            }
-            //通过效验，添加数据
-            $.ajax({
-                type:"GET",
-                url:" /addUserInfo",
-                data:"name="+name+"&iphone="+iphone+"&nickName="+$("#nickName").html(),
-                dataType:"json",
-                success:function(data){
-                    $("#name").val("");
-                    $("#iphone").val("");
-                    window.location.href = "/successMsg.html";
-                }
-            });
-        });
-
-        function textMsg(){
-            if ($textToast.css('display') != 'none') return;
-            $textToast.fadeIn(100);
-            setTimeout(function () {
-                $textToast.fadeOut(100);
-            }, 2000);
-        }
-    });
-
-    //warn
-    $(function(){
-        var $warnToast = $('#warnToast');
-        $('#showWarnToast').on('click', function(){
-            if ($warnToast.css('display') != 'none') return;
-
-            $warnToast.fadeIn(100);
-            setTimeout(function () {
-                $warnToast.fadeOut(100);
-            }, 2000);
         });
     });
 
@@ -356,22 +295,34 @@
         if (r != null) return unescape(r[2]); return null;
     }
 
-    // 删除url中某个参数,并跳转
-    function funcUrlDel(name){
-        var loca = window.location;
-        var baseUrl = loca.origin + loca.pathname + "?";
-        var query = loca.search.substr(1);
-        if (query.indexOf(name)>-1) {
-            var obj = {}
-            var arr = query.split("&");
-            for (var i = 0; i < arr.length; i++) {
-                arr[i] = arr[i].split("=");
-                obj[arr[i][0]] = arr[i][1];
-            };
-            delete obj[name];
-            var url = baseUrl + JSON.stringify(obj).replace(/[\"\{\}]/g,"").replace(/\:/g,"=").replace(/\,/g,"&");
-            return url
-        };
+    function ajaxFindBusinessList(openid) {
+        $.ajax({
+            type:"POST",
+            url:" /finBusinessList",
+            data:"openid="+openid,
+            dataType:"json",
+            async: false,
+            success:function(data){
+                //清空原列表信息
+                $('#businessList').empty();
+                var bodyStr = '';
+                //遍历并回显
+                $.each(data, function (n, value) {
+                    //alert(n + ' ' + value);
+                    bodyStr += '<a class="weui-cell  weui-cell_access" href="javascript:">'+
+                        '<div class="weui-cell__bd">'+
+                        '<p>'+value.name+'</p>'+
+                        '</div>'+
+                        '<div class="weui-cell__ft">'+value.iphone+'</div>'+
+                        '</a>';
+                });
+                $('#businessList').html(bodyStr);
+
+            },
+            error:function(jqXHR){
+                console.log("Error: "+jqXHR.status);
+                window.location.href = "/errorMsg.html";
+            }
+        });
     }
 </script>
-</html>
