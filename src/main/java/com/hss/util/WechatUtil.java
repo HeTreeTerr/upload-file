@@ -1,19 +1,17 @@
 package com.hss.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hss.Domian.WechatUser;
+import com.hss.domian.WechatUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package com.hss.Domian;
+package com.hss.domian;
 
 /**
  * 微信用户信息

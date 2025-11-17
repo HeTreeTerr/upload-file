@@ -1,4 +1,4 @@
-package com.hss.Domian;
+package com.hss.domian;
 
 public class BusinessInfo {
 

@@ -1,6 +1,6 @@
 package com.hss.service;
 
-import com.hss.Domian.BusinessInfo;
+import com.hss.domian.BusinessInfo;
 
 import java.util.List;
 

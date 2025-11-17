@@ -1,6 +1,7 @@
-package com.hss.service;
+package com.hss.service.impl;
 
-import com.hss.Domian.BusinessInfo;
+import com.hss.domian.BusinessInfo;
+import com.hss.service.BusinessService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;

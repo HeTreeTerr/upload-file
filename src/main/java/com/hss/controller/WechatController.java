@@ -1,7 +1,7 @@
 package com.hss.controller;
 
-import com.hss.Domian.BusinessInfo;
-import com.hss.Domian.WechatUser;
+import com.hss.domian.BusinessInfo;
+import com.hss.domian.WechatUser;
 import com.hss.service.BusinessService;
 import com.hss.util.RedisUtil;
 import com.hss.util.WechatUtil;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <!--<link rel="icon" href="https://getbootstrap.com/favicon.ico">-->
+
+    <title th:text="${title}"></title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body style="font-family: SimSun;">
+<p>我是固定文案...</p>
+<p th:text="${content}" />
+</body>
+</html>

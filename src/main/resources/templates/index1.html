@@ -62,6 +62,15 @@
                                     <input id="iphone" class="weui-input" placeholder="填写绑定的电话号码">
                                 </div>
                             </div>
+                            <!--<div class="weui-cell weui-cell_active">
+                                <div class="weui-cell__hd">
+                                    <label class="weui-label">图片：</label>
+                                </div>
+                                <div class="weui-cell__hd">
+                                    <button id="chooseImg" type="button" class="weui-btn weui-btn_mini weui-btn_default">选择图片</button>
+                                    <img id="userImg" src="" />
+                                </div>
+                            </div>-->
                             <div class="weui-cell weui-cell_active">
                                 <!--<a href="javascript:" class="weui-btn weui-btn_default" id="showToast">成功提示</a>-->
                                 <a href="javascript:" class="weui-btn weui-btn_default" id="showTextToast">提交</a>
@@ -179,7 +188,10 @@
                         'onMenuShareAppMessage',
                         'onMenuShareTimeline',
                         'openLocation',
-                        'openLocation'
+                        'openLocation',
+                        'chooseImage',
+                        'uploadImage',
+                        'downloadImage'
                     ]
                 });
 
@@ -221,6 +233,21 @@
                             accuracy = res.accuracy; // 位置精度
                         }
                     });
+                    
+                    /*$("#chooseImg").click(function () {
+                        var localIds;
+                        wx.chooseImage({
+                            count: 1, // 默认9
+                            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                            success: function (res) {
+                                localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                                console.log(res.tempFilePaths);
+                                $("#userImg").attr("src",localIds);
+                            }
+                        });
+                    });*/
+
                     //微信内置地图中查看位置信息
                     $("#locationInfo").click(function () {
                         //alert("查看位置信息：lat,long---"+latitude+"----"+longitude);
@@ -253,7 +280,10 @@
                     //效验可用
                     wx.checkJsApi({
                         jsApiList: [
-                            'onMenuShareAppMessage','onMenuShareTimeline'
+                            'onMenuShareAppMessage','onMenuShareTimeline',
+                            'openLocation',
+                            'openLocation',
+                            'chooseImage'
                         ],
                         success: function (res) {
                             //alert(res.errMsg);
